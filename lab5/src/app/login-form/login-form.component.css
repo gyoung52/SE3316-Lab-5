@@ -1,0 +1,19 @@
+:host {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: palegreen;
+}
+
+.input {
+    position: relative;
+}
+
+.input label {
+    padding: 0px 2px;
+    color: slategray;
+}
+
+.input input {
+    padding: 5px 20px;
+}
