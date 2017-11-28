@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-
+import { HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
@@ -12,11 +12,16 @@ import { UserService } from './user.service';
 import { AuthGuard } from './auth.guard';
 import { UserComponent } from './user/user.component';
 import { NotfoundComponent } from './notfound/notfound.component';
+import { CreateAccountComponent } from './create-account/create-account.component';
 
 const appRoutes:Routes = [
   {
     path: '',
     component: LoginFormComponent
+  },
+  {
+    path: 'createaccount',
+    component: CreateAccountComponent
   },
   {
     path: 'users',
@@ -51,11 +56,13 @@ const appRoutes:Routes = [
     LoginFormComponent,
     DashboardComponent,
     UserComponent,
-    NotfoundComponent
+    NotfoundComponent,
+    CreateAccountComponent
   ],
   imports: [
     RouterModule.forRoot(appRoutes),
-    BrowserModule
+    BrowserModule,
+    HttpClientModule
   ],
   providers: [
     UserService,
