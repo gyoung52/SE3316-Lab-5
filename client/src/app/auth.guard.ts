@@ -14,7 +14,7 @@ export class AuthGuard implements CanActivate {
     state: RouterStateSnapshot): boolean {
       if (!this.user.getUserLoggedIn()) {
         alert('You must log in to access the dashboard');
-        this.router.navigate(['/']);
+        this.router.navigate(['/login']);
       }
       
     return this.user.getUserLoggedIn();

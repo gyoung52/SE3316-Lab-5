@@ -9,6 +9,7 @@ import {UserService} from '../user.service';
 })
 export class CreateAccountComponent implements OnInit {
 
+  response = ''; 
   username = '';
   password = '';
   confPassword = '';
@@ -24,14 +25,20 @@ export class CreateAccountComponent implements OnInit {
     this.confPassword = e.target.elements[2].value;
     
     if(this.password == this.confPassword) {
+      
+      this.user.postData(this.onResponse.bind(this), this.username, this.password);
       console.log('Account created');
-      this.user.setUserLoggedIn();
+      this.user.setUserLoggedIn(true);
       this.router.navigate(['/dashboard']);
     }
     else {
       alert('Password was not confirmed correctly');
       this.router.navigate(['/createaccount']);
     }
+  }
+  
+  onResponse(res: string) {
+    this.response = res;
   }
 
 }

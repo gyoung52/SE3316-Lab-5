@@ -13,10 +13,17 @@ import { AuthGuard } from './auth.guard';
 import { UserComponent } from './user/user.component';
 import { NotfoundComponent } from './notfound/notfound.component';
 import { CreateAccountComponent } from './create-account/create-account.component';
+import { IndexComponent } from './index/index.component';
+import { HomeComponent } from './home/home.component';
 
 const appRoutes:Routes = [
+    
   {
     path: '',
+    component: HomeComponent
+  },
+  {
+    path: 'login',
     component: LoginFormComponent
   },
   {
@@ -57,7 +64,9 @@ const appRoutes:Routes = [
     DashboardComponent,
     UserComponent,
     NotfoundComponent,
-    CreateAccountComponent
+    CreateAccountComponent,
+    IndexComponent,
+    HomeComponent
   ],
   imports: [
     RouterModule.forRoot(appRoutes),

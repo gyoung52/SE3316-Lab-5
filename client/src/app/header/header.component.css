@@ -1,4 +1,8 @@
-:host {
+:host() h1{
     display: flex;
+    justify-content: center;
+}
+:host() a{
+    display: inline;
     justify-content: center;
 }

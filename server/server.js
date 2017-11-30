@@ -6,6 +6,7 @@ const saltRounds = 10;
 var app        = express();                 // define our app using express
 var path = __dirname;
 var validator = require('validator');
+var Account = require('./app/models/account');
 
 mongoose.connect('mongodb://localhost:27017/Course', {
     useMongoClient: true,
@@ -42,16 +43,18 @@ app.use('/api', router);
 
 router.route('/createaccount') 
     .post(function(req, res) {
-        var salt = bcrypt.genSaltSync(saltRounds);
-        var hash = bcrypt.hashSync(req.body.psw);
+        var account = new Account();
         
-        if(validator.isEmail(re.body.email)) {
-            account.email = req.body.email;
+        var salt = bcrypt.genSaltSync(saltRounds);
+        var hash = bcrypt.hashSync(req.body.password);
+        
+        if(validator.isEmail(req.body.username)) {
+            account.email = req.body.username;
             account.password = hash;
             
             account.save(function(err) {
                 if(err) {
-                    re.send(err);
+                    res.send(err);
                 }
                 res.json({message: 'Account created'});
             });
@@ -62,7 +65,7 @@ router.route('/createaccount')
     });
 
 router.route('/verify')
-    .post(function(re, res) {
+    .post(function(req, res) {
         Account.find({'email':req.body.email}, function(err, account) {
             if(account[0] == null) {
                 res.json({message: 'invalid username'});

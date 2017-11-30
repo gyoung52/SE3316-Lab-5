@@ -5,15 +5,13 @@ import { HttpClient } from '@angular/common/http';
 export class UserService {
 
   private isUserLoggedIn = false;
-  private username;
 
   constructor(private http:HttpClient) {
       this.isUserLoggedIn = false;
   }
   
-  setUserLoggedIn() {
-      this.isUserLoggedIn = true;
-      this.username = 'admin';
+  setUserLoggedIn(status) {
+      this.isUserLoggedIn = status;
   }
   
   getUserLoggedIn() {
@@ -27,6 +25,13 @@ export class UserService {
       });
   }
   
-  //posData(callback_fun, username)
+  postData(callback_fun, username, password) {
+    this.http.post('/api/creataccount', username, password).subscribe(data=> {
+      console.log(data);
+      callback_fun(data['message']);
+    });
+  }
+  
+  
 
 }

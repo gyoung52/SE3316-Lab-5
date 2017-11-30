@@ -22,7 +22,7 @@ export class LoginFormComponent implements OnInit {
     console.log(username, password)
     
     if( username == 'admin' && password == 'admin') {
-      this.user.setUserLoggedIn();
+      this.user.setUserLoggedIn(true);
       this.router.navigate(['/dashboard']);
       this.response = 'admin logged in';
     }
