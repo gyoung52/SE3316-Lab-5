@@ -1,3 +1,12 @@
 <h2>Hello {{user}}</h2>
 <p>{{res}}</p>
 <ol id ='collections' ></ol>
+
+<div id="myModal" class="modal">
+  <!-- Modal content -->
+  <div class="modal-content">
+    <span (click)="close()" class="close">&times;</span>
+    <img style="height: 300px; width:300px" id="selectedImg"> 
+    <button (click)='delPic()'>Delete</button>
+  </div>
+</div>

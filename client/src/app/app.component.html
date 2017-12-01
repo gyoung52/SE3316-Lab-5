@@ -1,10 +1,10 @@
-<div class="fullpage">
-  <h1>
-    {{ title }}!
-  </h1>
-  <br>
+<p style="display:none">user = {{user}}</p>
+<br>
+<div class="head">
+  <app-header></app-header>
+  <br><br>
   <router-outlet></router-outlet>
 </div>
-
-<p style="display:none">user = {{user}}</p>
-<a href="/login" (click)='logout()'  *ngIf=user>Logout</a>
+<div class="logout">
+<a href="/login" class="logout" (click)='logout()'  *ngIf=user>Logout</a>
+</div>

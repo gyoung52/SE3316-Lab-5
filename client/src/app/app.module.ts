@@ -15,6 +15,7 @@ import { LoginGuard } from './login.guard';
 import { CollectionComponent } from './collection/collection.component';
 import { SearchComponent } from './search/search.component';
 import { NotfoundComponent } from './notfound/notfound.component';
+import { HeaderComponent } from './header/header.component';
 
 const appRoutes:Routes = [
 
@@ -64,7 +65,8 @@ const appRoutes:Routes = [
     VerifyComponent,
     CollectionComponent,
     SearchComponent,
-    NotfoundComponent
+    NotfoundComponent,
+    HeaderComponent
   ],
   imports: [
     BrowserModule, 

@@ -289,7 +289,35 @@ router.route('/addtoCollection')
             
         }); 
         
-    }); 
+    });
+    
+router.route('/deletefromCollection')
+
+    .post((req, res)=> {
+        var user = req.body.user, img = req.body.img, name = req.body.name, index;
+        Collection.find({user : user, name : name}, (err, col)=>{
+            
+            if(err){
+                return res.send(err); 
+            }
+            if(col[0] == null){
+                return res.send({message : "no collection"}); 
+            }
+            
+            index = col[0]['images'].indexOf(img);
+            if (index !== -1) {
+                col[0]['images'].splice(index, 1);
+            }
+            
+            col[0].save((err)=>{
+                if(err){
+                    return res.send(err); 
+                }
+                return res.send({message : "success"}); 
+            }); 
+            
+        }); 
+    })
 
 // REGISTER OUR ROUTES -------------------------------
 // all of our routes will be prefixed with /api

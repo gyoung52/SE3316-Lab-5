@@ -33,5 +33,22 @@ export class DashboardComponent implements OnInit {
       }
     }
   }
+  
+  imgClick(event){
+    if(($('#wrap').children().length) > 0){
+      $('#selectedImg').attr('src', event.data.src);
+      $('#selectedImg').attr('value', e.data.name);
+      $('#myModal').css('display', 'block'); 
+    }
+  }
+  
+  close(){
+    $('#myModal').css('display', 'none');
+  }
+  
+  delpic(){
+    this.userService.deletefromCollection(this.user, $('selectedImg').attr('src'), $('#selectedImg').attr('value'));
+    $('#myModal').css('display', 'none');
+  }
 
 }

@@ -61,4 +61,10 @@ export class UserService {
      })
  }
  
+ deletefromCollection(user, img, name){
+     this.http.post('/api/deletefromCollection', {'user': user, 'img': img, 'name': name}).subscribe(data=>{
+         console.log(data);
+     });
+ }
+ 
 }

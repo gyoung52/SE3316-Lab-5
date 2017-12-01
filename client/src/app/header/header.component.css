@@ -1,6 +1,8 @@
 :host() h1{
     display: flex;
     justify-content: center;
+    color: white;
+    background-color: darkblue;
 }
 :host() a{
     display: inline;

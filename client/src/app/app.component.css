@@ -1,5 +1,6 @@
-.fullpage {
-    display: flex;
-    justify-content: center;
+.logout {
+    float: right;
+}
+.head {
     text-align: center;
 }
