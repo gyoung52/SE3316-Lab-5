@@ -10,35 +10,22 @@ import {UserService} from '../user.service';
 export class CreateAccountComponent implements OnInit {
 
   response = ''; 
-  username = '';
-  password = '';
-  confPassword = '';
-  
-  constructor(private router:Router, private user:UserService) { }
+
+  constructor(private userService:UserService, private router:Router) { }
 
   ngOnInit() {
   }
   
-  createAccount(e) {
-    this.username = e.target.elements[0].value;
-    this.password = e.target.elements[1].value;
-    this.confPassword = e.target.elements[2].value;
-    
-    if(this.password == this.confPassword) {
-      
-      this.user.postData(this.onResponse.bind(this), this.username, this.password);
-      console.log('Account created');
-      this.user.setUserLoggedIn(true);
-      this.router.navigate(['/dashboard']);
-    }
-    else {
-      alert('Password was not confirmed correctly');
-      this.router.navigate(['/createaccount']);
-    }
+  signUp(email, psw){
+    console.log(email," ",psw)
+    this.userService.postData(this.onResponse.bind(this), email, psw); 
   }
   
-  onResponse(res: string) {
-    this.response = res;
+  onResponse(res: string){
+    this.response = res; 
+    if(res == "Account created"){
+      this.router.navigate(['/verify']); 
+    }
   }
 
 }

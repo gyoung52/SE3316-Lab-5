@@ -1,17 +1,27 @@
-var mongoose   = require('mongoose');
-var bodyParser = require('body-parser');
-var express    = require('express');        // call express
-var bcrypt = require('bcrypt');
-const saltRounds = 10;
-var app        = express();                 // define our app using express
-var path = __dirname;
-var validator = require('validator');
-var Account = require('./app/models/account');
+// server.js
 
-mongoose.connect('mongodb://localhost:27017/Course', {
-    useMongoClient: true,
-});
+// BASE SETUP
+// =============================================================================
+
+var mongoose = require("mongoose");
+var nodemailer = require('nodemailer'); 
+var randomstring = require('randomstring');
+
+var Account = require("./app/models/account"); 
+var Collection = require("./app/models/collection"); 
+ 
+
+mongoose.connect('mongodb://localhost:27017/sendit', { useMongoClient : true });
 mongoose.Promise = global.Promise;
+
+// call the packages we need
+var express    = require('express');        // call express
+var app        = express();                 // define our app using express
+var bodyParser = require('body-parser');
+
+var bcrypt = require('bcrypt'); 
+const saltRounds = 10; 
+var validator = require('validator'); 
 
 
 // configure app to use bodyParser()
@@ -21,74 +31,271 @@ app.use(bodyParser.json());
 
 var port = 8081;        // set our port
 
+
+var smtpTransport = nodemailer.createTransport({
+    service: "Gmail", 
+    auth: {
+        user: "teb244ecelab@gmail.com",   
+        pass: 'ece4436google'
+    }
+});
+
+var rand,mailOptions,host,link;
+
 // ROUTES FOR OUR API
 // =============================================================================
-var router = express.Router();
+var router = express.Router();              // get an instance of the express Router
 
-// get an instance of the express Router
-app.use(express.static(__dirname));
 router.use(function(req, res, next){
-  next();
-});
+    console.log('Something is happening'); 
+    next(); 
+}); 
+
 // test route to make sure everything is working (accessed at GET http://localhost:8080/api)
 router.get('/', function(req, res) {
-    console.log("Sent index.html");
-    res.json({message: 'Hello World'});
+    res.json({ message: 'api created' });   
 });
 
+// more routes for our API will happen here
+
+router.route('/create')
+
+    .post(function(req,res){
+        console.log(req);
+        var email = req.body.email; 
+        console.log(email);
+        if(!validator.isEmail(email) || email == ""){
+            return res.send({message: "invalid email"}); 
+        }
+        var psw = req.body.psw; 
+        if(psw == ""){
+            return res.send({message: "enter password"}); 
+        }
+        //encrypting the password 
+        var salt = bcrypt.genSaltSync(saltRounds);  
+        var hash = bcrypt.hashSync(psw, salt); 
+        
+        var code = randomstring.generate(); 
+        
+        
+        var newAccount = new Account({
+            email : email, password: hash, code : code, loggedIn : false 
+        });
+        
+        //if the account is already in use
+        Account.find({'email':email}, function(err, account){
+            if(account[0] == null){
+                //if the account isnt in use make one
+                newAccount.save(function(err){
+                    if(err){
+                        res.send(err); 
+                    }
+                    res.json({message: 'Account created'}); 
+                });
+            }else{
+                res.send({message: 'email already in use!'});
+            }
+            if(err){
+                res.send(err); 
+            }
+        });
+        
+        mailOptions={
+            to : req.body.email,
+            subject : "Please confirm your Email account",
+            html : "Use this code to verify your email: " + newAccount.code
+        };
+        smtpTransport.sendMail(mailOptions, function(error, response){
+             if(error){
+                console.log(error);
+                res.end("error");
+             }else{
+                res.end("email sent");
+             }
+        });
+        
+    })
+    
+    .get(function(req,res){
+       Account.find(function(err, accounts){
+           if(err){
+               res.send(err); 
+           }
+          res.json(accounts); 
+        });
+    });
+    
+router.route('/verify') 
+
+    .post((req, res) => {
+        const {code} = req.body; 
+
+        //find the account which matches the code
+        Account.find({code : code}, (err, acc)=>{
+            if(err){
+                return res.send(err); 
+            }
+            if(acc[0] == null){
+                return res.send({message:'no user found!'}); 
+            }
+            
+            acc[0]['loggedIn'] = true; 
+            acc[0]['code'] = ''; 
+            
+            acc[0].save((err)=> {
+                if(err){
+                    return res.send(err); 
+                }
+                return res.send({message: 'verification success'}); 
+            });
+        }); 
+    }); 
+
+    // .get(function(req,res){
+    //     console.log(req.protocol+":/"+req.get('host'));
+    //     if((req.protocol+"://"+req.get('host'))==("http://"+host))
+    //     {
+    //         console.log("Domain is matched. Information is from Authentic email");
+    //         if(req.query.id==rand)
+    //         {
+    //             console.log("email is verified");
+    //             res.end("<h1>Email "+mailOptions.to+" is been Successfully verified");
+    //         }
+    //         else
+    //         {
+    //             console.log("email is not verified");
+    //             res.end("<h1>Bad Request</h1>");
+    //         }
+    //     }
+    //     else
+    //     {
+    //         res.end("<h1>Request is from unknown source");
+    //     }
+    // })
+
+router.route('/login')
+
+    .post(function(req, res){
+        
+        var email = req.body.email;
+        var psw = req.body.psw;
+        
+        if(psw == ""){
+            return res.json({message: 'invalid password'}); 
+        }
+        
+        Account.find({email:email}, function(err, account){
+            //checking for the username 
+            if(account[0] == null){
+                return res.json({message: 'invalid username!'}); 
+            }
+            //validating password
+            var valid = bcrypt.compareSync(psw, account[0]['password']);
+            if(!valid){
+                return res.json({message: 'invalid password!'}); 
+            }
+            //checking if the account has been verified 
+            if(!(account[0]['loggedIn'])){
+                return res.json({message: 'you need to verify your account!'}); 
+            }
+            
+            if(err){
+                return res.send(err); 
+            }
+            
+            res.send({message:'success', email: account[0]['email']}); 
+            
+        }); 
+    });
+    
+router.route('/createCollection')
+
+    .post(function(req, res){
+        
+        var user = req.body.user, name = req.body.name, desc = req.body.desc;    
+        
+        Collection.find({ user : user, name : name}, function(err, collections){
+            
+            if(err){
+                return res.send(err);
+            }
+            if(!(collections[0]==null)){
+                return res.json({message: "You already have a collection with that name"}); 
+            }
+            
+            var coll= new Collection();
+            coll.user= user;
+            coll.name= name;
+            coll.desc = desc;
+            coll.ispublic= false;
+            coll.save(function(err){
+                if(err)
+                    return res.send(err);
+                
+                res.json({message: 'success'});
+            });
+            
+        });
+    });
+    
+router.route('/getCollections')
+    
+    .post((req, res)=> {
+        
+        var user = req.body.user;
+        console.log(user);
+        Collection.find({user : user}, (err, col)=>{
+            if(err){
+                return res.send(err);
+            }
+            console.log(col);
+            return res.send(col); 
+            
+        }); 
+        
+    })
+    
+    .get(function(req,res){
+       Collection.find(function(err, accounts){
+           if(err){
+               res.send(err); 
+           }
+          res.json(accounts); 
+        });
+    });
+    
+router.route('/addtoCollection')
+
+    .post((req, res)=>{
+        
+        var user = req.body.user, img = req.body.img, name = req.body.name; 
+        Collection.find({user : user, name : name}, (err, col)=>{
+            
+            if(err){
+                return res.send(err); 
+            }
+            if(col[0] == null){
+                return res.send({message : "no collection"}); 
+            }
+            
+            col[0]['images'].push(img); 
+            
+            col[0].save((err)=>{
+                if(err){
+                    return res.send(err); 
+                }
+                return res.send({message : "success"}); 
+            }); 
+            
+        }); 
+        
+    }); 
 
 // REGISTER OUR ROUTES -------------------------------
 // all of our routes will be prefixed with /api
 app.use('/api', router);
 
-router.route('/createaccount') 
-    .post(function(req, res) {
-        var account = new Account();
-        
-        var salt = bcrypt.genSaltSync(saltRounds);
-        var hash = bcrypt.hashSync(req.body.password);
-        
-        if(validator.isEmail(req.body.username)) {
-            account.email = req.body.username;
-            account.password = hash;
-            
-            account.save(function(err) {
-                if(err) {
-                    res.send(err);
-                }
-                res.json({message: 'Account created'});
-            });
-        }
-        else {
-            res.json({message: 'Invalid email'}); 
-        }
-    });
-
-router.route('/verify')
-    .post(function(req, res) {
-        Account.find({'email':req.body.email}, function(err, account) {
-            if(account[0] == null) {
-                res.json({message: 'invalid username'});
-            }
-            else {
-                if (err) {
-                    res.send(err);
-                }
-                var valid = bcrypt.compareSync(req.body.psw, account[0]['password']);
-                console.log(valid);
-                if (valid){
-                    res.json({massage: 'valid password'});
-                }
-                else {
-                    res.json({message: 'invalid password'});
-                }
-            }
-        });
-    });
-    
-
-
 // START THE SERVER
 // =============================================================================
 app.listen(port);
-console.log('Magic happens on port ' + port);
+console.log('Server is running on port: ' + port);

@@ -1,18 +1,15 @@
-<form (submit)="createAccount($event)">
-    <div class="input">
-        <label>Username</label>
-        <input type="text">
-    </div>
-    <br>
-    <div class="input">
-        <label>Password</label>
-        <input type="password">
-    </div>
-    <div class="input">
-        <label>Confirm Password</label>
-        <input type="password">
-    </div>
-    <div class="input">
-        <input type="submit" value="Login">
-    </div>
-</form>
+<p>
+  {{response}}
+</p>
+
+
+<div class="container" >
+    <label><b>Email</b></label>
+    <input type="email" placeholder="Enter Username" #email name="email" required>
+    <br><br>
+    <label><b>Password</b></label>
+    <input type="password" placeholder="Enter Password" #psw name="psw" required>
+    <br><br>
+    <button (click)='signUp(email.value, psw.value)'>sign-up</button>
+    <a href="/login" >Login</a>
+</div>

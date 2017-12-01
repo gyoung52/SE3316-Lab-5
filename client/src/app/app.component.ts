@@ -6,5 +6,11 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'app';
+  title = 'NASA Image Collection';
+  user = localStorage.getItem('user') != null;  
+  
+  logout(){
+    localStorage.removeItem('user'); 
+  }
+  
 }

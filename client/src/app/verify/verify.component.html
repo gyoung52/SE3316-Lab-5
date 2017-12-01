@@ -1,0 +1,11 @@
+<p>
+  {{response}}
+</p>
+
+
+<div class="container" >
+    <label><b>Verify your Email</b></label>
+    <input type="text" placeholder="Enter Secret Token" #code name="code" required>
+    <br><br>
+    <button (click)='verify(code.value)'>Verify</button>
+</div>

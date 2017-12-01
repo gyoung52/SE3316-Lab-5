@@ -1,0 +1,21 @@
+<p style="text-align:center;"> The is a paragraph about the website</p>
+<h4 style="text-align:center;">Top rated photo collections</h4>
+<p style="text-align:center"> Search imagmes by key word 
+    <input #search>
+    <button (click)="searchImages(search.value)">search</button> 
+</p>
+<ol id="pictures" #rankedCollections></ol>
+
+<div id="myModal" class="modal">
+  <!-- Modal content -->
+  <div class="modal-content">
+    <span (click)="close()" class="close">&times;</span>
+    <img style="height: 300px; width:300px" id="selectedImg"> 
+    <ul id='wrap' style="list-style-type:none">
+        <li id='collections' *ngFor= "let x of collections">
+            <input type="radio" name="collection" value='{{x}}'>{{x}}
+        </li>
+    </ul>
+    <button (click)='addPic()'>add</button>
+  </div>
+</div>

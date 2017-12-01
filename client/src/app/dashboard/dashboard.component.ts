@@ -1,5 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { UserService } from '../user.service'
+import {Router} from '@angular/router';
+import * as $ from 'jquery';
+
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -7,11 +10,28 @@ import { UserService } from '../user.service'
 })
 export class DashboardComponent implements OnInit {
 
-  
-  
-  constructor(private user:UserService) { }
+  user = localStorage.getItem('user'); 
+  @ViewChild('collections') collections: ElementRef;
+  res = ''; 
+
+  constructor(private userService: UserService) { }
 
   ngOnInit() {
+    this.userService.getCollections(this.onCollectionResponse.bind(this), localStorage.getItem('user')); 
+  }
+  
+  onCollectionResponse(res : string){
+    console.log(res);
+    if(res[0] == null){
+      return this.res = 'sorry to see that you have no collections'
+    }
+    for(var i = 0; i < res.length; i++){
+    console.log(i);
+      $('#collections').append( "<li style='text-align:centre' > <h3> " + res[i]['name'] + "</h3><p>" + res[i]['desc'] + "</p>"); 
+      for(var j = 0; j < res[i]['images'].length; j ++){
+        $('#collections').append("<img  src = "+res[i]['images'][j] +"></li>" ); 
+      }
+    }
   }
 
 }

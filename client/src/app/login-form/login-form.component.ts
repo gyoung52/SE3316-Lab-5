@@ -9,33 +9,24 @@ import { UserService } from '../user.service'
 })
 export class LoginFormComponent implements OnInit {
 
-  response = '';
-  
-  constructor(private router:Router, private user:UserService) { }
+  //initialize response with empty string
+  response = ''; 
+
+  constructor(private user:UserService, private router:Router) { }
 
   ngOnInit() {
   }
   
-  loginUser(e) {
-    var username = e.target.elements[0].value;
-    var password = e.target.elements[1].value;
-    console.log(username, password)
-    
-    if( username == 'admin' && password == 'admin') {
-      this.user.setUserLoggedIn(true);
+  login(email, psw){
+    this.user.postValidate(this.onResponse.bind(this), email, psw);
+  }
+  
+  onResponse(res: string){
+    this.response = res; 
+    if(res == "success"){
       this.router.navigate(['/dashboard']);
-      this.response = 'admin logged in';
     }
-    else {
-      this.response = 'credentials wrong';
-    }
-    this.user.getData(this.onResponse.bind(this));
   }
-  
-  onResponse(res: string) {
-    this.response = res;
-  }
-  
   
 
 }

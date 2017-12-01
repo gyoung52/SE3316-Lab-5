@@ -1,82 +1,77 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
-import { HttpClientModule } from '@angular/common/http';
+import {HttpClientModule} from '@angular/common/http'; 
 
 import { AppComponent } from './app.component';
-import { HeaderComponent } from './header/header.component';
-import { FooterComponent } from './footer/footer.component';
 import { LoginFormComponent } from './login-form/login-form.component';
-import { DashboardComponent } from './dashboard/dashboard.component';
-import { UserService } from './user.service';
-import { AuthGuard } from './auth.guard';
-import { UserComponent } from './user/user.component';
-import { NotfoundComponent } from './notfound/notfound.component';
+import { UserService} from './user.service';
+import { SearchService} from './search.service'; 
+import { RouterModule, Routes} from '@angular/router';
 import { CreateAccountComponent } from './create-account/create-account.component';
-import { IndexComponent } from './index/index.component';
-import { HomeComponent } from './home/home.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { VerifyComponent } from './verify/verify.component';
+import { AuthGuard } from './auth.guard'; 
+import { LoginGuard } from './login.guard';
+import { CollectionComponent } from './collection/collection.component';
+import { SearchComponent } from './search/search.component';
+import { NotfoundComponent } from './notfound/notfound.component';
 
 const appRoutes:Routes = [
-    
+
   {
-    path: '',
-    component: HomeComponent
+    path: 'login', 
+    component: LoginFormComponent,
+    canActivate: [LoginGuard]
+  }, 
+  {
+    path: 'createaccount', 
+    component: CreateAccountComponent,
+    canActivate: [LoginGuard]
+  }, 
+  {
+    path: 'verify', 
+    component: VerifyComponent,
+    canActivate: [LoginGuard]
+  }, 
+  {
+    path: 'search', 
+    component: SearchComponent, 
+    canActivate: [AuthGuard]
   },
   {
-    path: 'login',
-    component: LoginFormComponent
+    path: 'collection', 
+    component: CollectionComponent, 
+    canActivate: [AuthGuard]
   },
   {
-    path: 'createaccount',
-    component: CreateAccountComponent
-  },
+    path: 'dashboard' ,
+    component: DashboardComponent,
+    canActivate: [AuthGuard]
+  }, 
   {
-    path: 'users',
-    //component: UserComponent
-    children: [
-      {
-        path: ':name',
-        component: UserComponent
-      },
-      {
-        path: ':name/:id',
-        component: UserComponent
-      }
-      ]
-  },
-  {
-    path: 'dashboard',
-    canActivate: [AuthGuard],
-    component: DashboardComponent
-  },
-  {
-    path: '**',
-    component: NotfoundComponent
+    path: '**', 
+    component : NotfoundComponent
   }
+  
 ]
 
 @NgModule({
   declarations: [
     AppComponent,
-    HeaderComponent,
-    FooterComponent,
     LoginFormComponent,
-    DashboardComponent,
-    UserComponent,
-    NotfoundComponent,
     CreateAccountComponent,
-    IndexComponent,
-    HomeComponent
+    DashboardComponent,
+    VerifyComponent,
+    CollectionComponent,
+    SearchComponent,
+    NotfoundComponent
   ],
   imports: [
-    RouterModule.forRoot(appRoutes),
-    BrowserModule,
-    HttpClientModule
+    BrowserModule, 
+    HttpClientModule, 
+    RouterModule.forRoot(appRoutes)
   ],
-  providers: [
-    UserService,
-    AuthGuard
-    ],
+  providers: [LoginGuard, AuthGuard, UserService, SearchService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

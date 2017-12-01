@@ -1,0 +1,10 @@
+<h1>Create New Image Collection</h1>
+<label for="collectionName">Name </label>
+<input type="text" name="collectionName" #name/>
+<br>
+<br>
+<label for="collectionDesc">Description</label>
+<input type="text" name="collectionDesc" #description/>
+<br>
+<br>
+<button type="submit" (click)="collectionCreate(name.value, description.value)">Create</button>

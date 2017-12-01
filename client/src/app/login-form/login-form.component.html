@@ -1,18 +1,15 @@
-<form (submit)="loginUser($event)">
-    <div class="input">
-        <label>Username</label>
-        <input type="text">
-    </div>
-    <br>
-    <div class="imput">
-        <label>Password</label>
-        <input type="password">
-    </div>
-    <br>
-    <div class="input">
-        <input type="submit" value="Login">
-        <a href="/createaccount">Create an account</a>
-    </div>
-    
-</form>
-<br><br>
+<p>
+  {{response}}
+</p>
+
+
+<div class="container" >
+    <label><b>Email</b></label>
+    <input type="email" placeholder="Enter Username" #email name="email" required>
+    <br><br>
+    <label><b>Password</b></label>
+    <input type="password" placeholder="Enter Password" #psw name="psw" required>
+    <br><br>
+    <button (click)='login(email.value, psw.value)'>Login</button>
+    <a href="/createaccount" >Create an account</a>
+</div>
