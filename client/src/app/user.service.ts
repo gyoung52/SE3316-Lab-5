@@ -81,4 +81,19 @@ export class UserService {
     }); 
  }
  
+setLike(callback_fun, username, name){
+    var usernameAccount = localStorage.getItem('user');
+    this.http.put('/api/addLike', { 'usernameCollection' : username,  'name' : name, 'usernameAccount' : usernameAccount}).subscribe(data=>{
+    console.log('DATA:',data);
+    callback_fun(data);
+    })
+    }
+    
+    getHomeCollections(callback){
+     this.http.post('/api/getCollections', { 'user' : localStorage.getItem('user') }).subscribe(data=>{
+         console.log(data);
+        callback(data);
+     }); 
+    }
+ 
 }

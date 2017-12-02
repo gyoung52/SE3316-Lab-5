@@ -16,6 +16,7 @@ import { CollectionComponent } from './collection/collection.component';
 import { SearchComponent } from './search/search.component';
 import { NotfoundComponent } from './notfound/notfound.component';
 import { HeaderComponent } from './header/header.component';
+import { HomeComponent } from './home/home.component';
 
 const appRoutes:Routes = [
 
@@ -48,7 +49,11 @@ const appRoutes:Routes = [
     path: 'dashboard' ,
     component: DashboardComponent,
     canActivate: [AuthGuard]
-  }, 
+  },
+  {
+    path: 'home',
+    component: HomeComponent
+  },
   {
     path: '**', 
     component : NotfoundComponent
@@ -67,6 +72,7 @@ const appRoutes:Routes = [
     SearchComponent,
     NotfoundComponent,
     HeaderComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule, 

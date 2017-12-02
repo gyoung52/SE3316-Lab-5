@@ -10,6 +10,7 @@ import {UserService} from '../user.service';
 })
 export class SearchComponent implements OnInit {
   
+  pages = [][];
   photoCollection = [];
   collections = []; 
   isCollection = false; 
@@ -35,16 +36,34 @@ export class SearchComponent implements OnInit {
   }
   
   onSearchResponse(res: string){
+    var numOfPages;
+    var spill;
     this.photoCollection = new Array();
-      for(var i =0; i < res.length; i++){
-        if (res[i]['links'] != null){
-          if (res[i]['links'][0]['render'] == "image"){
-            this.photoCollection.push(res[i]['links'][0]['href']);
+    this.pages = new Array();
+    if (res.length % 20 == 0) {
+      numOfPages = res.length/20;
+      spill = 0;
+    } else {
+      numOfPages = res.length/20 + 1;
+      spill = res.length%20;
+    }
+    for (var i = 0; i < numOfPages; i++) {
+      var pageLength = 20;
+      if (i = numOfPages-1 && spill !== 0) {
+        pageLength = spill;
+      }
+      for(var j =0; j < pageLength; j++){
+        if (res[j]['links'] != null){
+          if (res[j]['links'][0]['render'] == "image"){
+            this.photoCollection.push(res[j]['links'][0]['href']);
           }
         }
+      }
+      this.pages.push(photoCollection);
     }
     this.rankedCollections.nativeElement.innerHTML = "";
-    for (var i = 0; i < this.photoCollection.length ; i++){
+    //for (var i = 0; )
+    for (var j = 0; j < this.photoCollection.length ; j++){
       $('#pictures').append("<li style='float:left;padding: 0.5cm 0.25cm 0.5cm 0.25cm;' >"
       + "<img id="+i+" style='height:400px; width: 400px' src ='" 
       + this.photoCollection[i] + "'></li>");
