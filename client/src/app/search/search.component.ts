@@ -10,7 +10,10 @@ import {UserService} from '../user.service';
 })
 export class SearchComponent implements OnInit {
   
-  pages = [][];
+  pageNum = 0;
+  numOfPages = 0;
+  spill = 0;
+  pages = [[],[],[],[], [], []];
   photoCollection = [];
   collections = []; 
   isCollection = false; 
@@ -36,38 +39,70 @@ export class SearchComponent implements OnInit {
   }
   
   onSearchResponse(res: string){
-    var numOfPages;
-    var spill;
+    
     this.photoCollection = new Array();
-    this.pages = new Array();
+    //this.pages = new Array(Array());
     if (res.length % 20 == 0) {
-      numOfPages = res.length/20;
-      spill = 0;
+      this.numOfPages = res.length/20;
+      this.spill = 0;
     } else {
-      numOfPages = res.length/20 + 1;
-      spill = res.length%20;
+      this.numOfPages = res.length/20 + 1;
+      this.spill = res.length%20;
     }
-    for (var i = 0; i < numOfPages; i++) {
+    console.log('Response length',res.length)
+    console.log('Num of pages & spill:',this.numOfPages, this.spill)
+    for (var i = 0; i < this.numOfPages; i++) {
       var pageLength = 20;
-      if (i = numOfPages-1 && spill !== 0) {
-        pageLength = spill;
+      if (i == this.numOfPages-1 && this.spill !== 0) {
+        pageLength = this.spill;
       }
-      for(var j =0; j < pageLength; j++){
-        if (res[j]['links'] != null){
-          if (res[j]['links'][0]['render'] == "image"){
-            this.photoCollection.push(res[j]['links'][0]['href']);
+      console.log('i:',i);
+      for(var j = 0; j < pageLength; j++){
+        console.log('j:',j);
+        //console.log(this.photoCollection);
+        if (res[j+(i*20)]['links'] != null){
+          if (res[j+(i*20)]['links'][0]['render'] == "image"){
+            //this.pages[i][j].push(res[j]['links'][0]['href']);
+            console.log('pages:',this.pages);
+            this.pages[i][j] = res[j+(i*20)]['links'][0]['href'];
           }
         }
       }
-      this.pages.push(photoCollection);
+      //console.log('pages at i:',this.pages[i]);
+      //(this.pages[i]).push(this.photoCollection);
     }
     this.rankedCollections.nativeElement.innerHTML = "";
-    //for (var i = 0; )
-    for (var j = 0; j < this.photoCollection.length ; j++){
+    for (var j = 0; j < this.pages[0].length ; j++){
       $('#pictures').append("<li style='float:left;padding: 0.5cm 0.25cm 0.5cm 0.25cm;' >"
-      + "<img id="+i+" style='height:400px; width: 400px' src ='" 
-      + this.photoCollection[i] + "'></li>");
-      $("#"+i).click({img:$("#"+i).attr('src')}, this.imgClick); 
+      + "<img id="+j+" style='height:400px; width: 400px' src ='" 
+      + this.pages[0][j] + "'></li>");
+      $("#"+j).click({img:$("#"+j).attr('src')}, this.imgClick); 
+    }
+  }
+  
+  pageUpClick(event){
+    if (this.pageNum !== (this.numOfPages-1)){
+      this.pageNum++;
+      this.rankedCollections.nativeElement.innerHTML = "";
+      for (var j = 0; j < this.pages[this.pageNum].length ; j++){
+        $('#pictures').append("<li style='float:left;padding: 0.5cm 0.25cm 0.5cm 0.25cm;' >"
+        + "<img id="+j+" style='height:400px; width: 400px' src ='" 
+        + this.pages[this.pageNum][j] + "'></li>");
+        $("#"+j).click({img:$("#"+j).attr('src')}, this.imgClick); 
+      }
+    }
+  }
+  
+  pageDownClick(event){
+    if (this.pageNum !== 0){
+      this.pageNum--;
+      this.rankedCollections.nativeElement.innerHTML = "";
+      for (var j = 0; j < this.pages[this.pageNum].length ; j++){
+        $('#pictures').append("<li style='float:left;padding: 0.5cm 0.25cm 0.5cm 0.25cm;' >"
+        + "<img id="+j+" style='height:400px; width: 400px' src ='" 
+        + this.pages[this.pageNum][j] + "'></li>");
+        $("#"+j).click({img:$("#"+j).attr('src')}, this.imgClick); 
+      }
     }
   }
   

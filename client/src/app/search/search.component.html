@@ -4,6 +4,8 @@
     <input #search>
     <button (click)="searchImages(search.value)">search</button> 
 </p>
+<button id="back" (click)="pageDownClick($event)"><</button><button id="forward" (click)="pageUpClick($event)">></button>
+<br>
 <ol id="pictures" #rankedCollections></ol>
 
 <div id="myModal" class="modal">
