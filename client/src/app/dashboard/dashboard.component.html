@@ -1,6 +1,19 @@
 <h2>Hello {{user}}</h2>
 <p>{{res}}</p>
-<ol id ='collections' ></ol>
+
+<ol id ='collections' >
+    <li id='collections' *ngFor= "let x of collection">
+        <h3>{{x.name}}</h3>
+        <p id={{x.name}} (click)= 'editDesc(x)'>{{x.desc}}</p>
+        <div> 
+            <input type="checkbox" name="collection" value='{{x}}' [checked]="x.ispublic" (click)='privacyChange(x)'>Public
+        </div>
+        <div *ngFor ='let img of x.images' > 
+            <img (click)='clickImg(img, x)' src ={{img}}> 
+        </div>
+    </li>
+</ol>
+
 
 <div id="myModal" class="modal">
   <!-- Modal content -->
@@ -8,5 +21,14 @@
     <span (click)="close()" class="close">&times;</span>
     <img style="height: 300px; width:300px" id="selectedImg"> 
     <button (click)='delPic()'>Delete</button>
+  </div>
+</div>
+
+<div id="myModal2" class="modal">
+  <!-- Modal content -->
+  <div class="modal-content">
+    <span (click)="close1()" class="close">&times;</span>
+    <input type = "text" id="input"> 
+    <button (click)='saveDesc()'>Save</button>
   </div>
 </div>

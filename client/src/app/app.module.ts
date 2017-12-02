@@ -66,7 +66,7 @@ const appRoutes:Routes = [
     CollectionComponent,
     SearchComponent,
     NotfoundComponent,
-    HeaderComponent
+    HeaderComponent,
   ],
   imports: [
     BrowserModule, 

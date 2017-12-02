@@ -58,13 +58,27 @@ export class UserService {
  addtoCollection(user, img, name){
      this.http.post('/api/addtoCollection', { 'user' : user, 'img' : img, 'name' : name}).subscribe(data=>{
         console.log(data); 
-     })
+     });
  }
  
  deletefromCollection(user, img, name){
      this.http.post('/api/deletefromCollection', {'user': user, 'img': img, 'name': name}).subscribe(data=>{
          console.log(data);
      });
+ }
+ 
+ saveDesc(name, value, user) {
+     console.log('service', value);
+    this.http.put('/api/saveDescription', {'user': localStorage.getItem('user'), 'name': name, 'desc': value}).subscribe(data=>{
+        console.log(data);
+    });
+ }
+ 
+ changePrivacy(type, user){
+     console.log(user);
+     this.http.put('/api/updatePrivacy', {type : type, user: user.user, name: user.name }).subscribe(data=>{
+        console.log(data); 
+    }); 
  }
  
 }

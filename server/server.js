@@ -35,8 +35,8 @@ var port = 8081;        // set our port
 var smtpTransport = nodemailer.createTransport({
     service: "Gmail", 
     auth: {
-        user: "teb244ecelab@gmail.com",   
-        pass: 'ece4436google'
+        user: "gyoung52se3316@gmail.com",   
+        pass: 'gr43m3y0ung'
     }
 });
 
@@ -294,17 +294,21 @@ router.route('/addtoCollection')
 router.route('/deletefromCollection')
 
     .post((req, res)=> {
-        var user = req.body.user, img = req.body.img, name = req.body.name, index;
+        var user = req.body.user, img = req.body.img, name = req.body.name;
         Collection.find({user : user, name : name}, (err, col)=>{
             
             if(err){
                 return res.send(err); 
             }
+            
+            const index = col[0]['images'].indexOf(img);
+            console.log("image", img);
+            
             if(col[0] == null){
                 return res.send({message : "no collection"}); 
             }
+            console.log(col);
             
-            index = col[0]['images'].indexOf(img);
             if (index !== -1) {
                 col[0]['images'].splice(index, 1);
             }
@@ -318,6 +322,52 @@ router.route('/deletefromCollection')
             
         }); 
     })
+
+router.route('/saveDescription')
+
+    .put((req, res)=> {
+        var user = req.body.user, name = req.body.name, desc = req.body.desc;
+        
+        console.log('server desc',desc);
+        Collection.find({user : user, name : name}, (err, col)=>{
+            if(err){
+                return res.send(err); 
+            }
+            
+            col[0]['desc'] = desc;
+            
+            col[0].save((err)=>{
+                if(err){
+                    return res.send(err); 
+                }
+                return res.send({message : "success"}); 
+            }); 
+        });
+    })
+    
+router.route('/updatePrivacy')
+    
+    .put((req, res)=>{
+        
+        var type = req.body.type, user = req.body.user, name = req.body.name; 
+        console.log(req.body); 
+        Collection.find({name : name, user : user }, (err, col) =>{
+            if(err){
+                return res.send(err); 
+            }
+            
+            col[0].ispublic = type; 
+            
+            col[0].save((err)=>{
+                if(err){
+                    res.send(err); 
+                }
+                
+                res.send({message : "success"}); 
+            });
+            
+        });
+    });
 
 // REGISTER OUR ROUTES -------------------------------
 // all of our routes will be prefixed with /api

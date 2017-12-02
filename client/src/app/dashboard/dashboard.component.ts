@@ -10,9 +10,10 @@ import * as $ from 'jquery';
 })
 export class DashboardComponent implements OnInit {
 
-  user = localStorage.getItem('user'); 
+  user = localStorage.getItem('user');
+  collection = '';
   @ViewChild('collections') collections: ElementRef;
-  res = ''; 
+  res = '';
 
   constructor(private userService: UserService) { }
 
@@ -21,34 +22,62 @@ export class DashboardComponent implements OnInit {
   }
   
   onCollectionResponse(res : string){
-    console.log(res);
+    this.collection = res; 
     if(res[0] == null){
       return this.res = 'sorry to see that you have no collections'
     }
-    for(var i = 0; i < res.length; i++){
-    console.log(i);
-      $('#collections').append( "<li style='text-align:centre' > <h3> " + res[i]['name'] + "</h3><p>" + res[i]['desc'] + "</p>"); 
-      for(var j = 0; j < res[i]['images'].length; j ++){
-        $('#collections').append("<img  src = "+res[i]['images'][j] +"></li>" ); 
-      }
-    }
+    // for(var i = 0; i < res.length; i++){
+    //   $('#collections').append( "<li style='text-align:centre' > <h3> " + res[i]['name'] + "</h3><p id=T"+i+">"+ res[i]['desc'] + 
+    //     "</p><div id=D"+i+"></div>"); 
+    //     //<input id=pu"+i+" type=checkbox name='public'>Public
+    //   for(var j = 0; j < res[i]['images'].length; j ++){
+    //     $('#collections').append("<br><img  value='name' id="+i+""+j+" src = "+res[i]['images'][j] +"></li>" );
+    //     $("#"+i+""+j).click({src : res[i]['images'][j], name : res[i]['name'] }, this.clickImg); 
+    //   }
+    //   $("#T"+i).click({name : res[i]['name'], desc : res[i]['desc'] }, this.editDesc); 
+    // }
   }
   
-  imgClick(event){
-    if(($('#wrap').children().length) > 0){
-      $('#selectedImg').attr('src', event.data.src);
-      $('#selectedImg').attr('value', e.data.name);
-      $('#myModal').css('display', 'block'); 
-    }
+  editDesc(x){
+    console.log(x); 
+    $("#input").attr('value', x.desc);
+    $("#input").attr('name', x.name);
+    $('#myModal2').css('display', 'block');
+  }
+  
+  close1(){
+    $('#myModal2').css('display', 'none');
+  }
+  
+  saveDesc(){
+    console.log($("#input").val())
+    this.userService.saveDesc($("#input").attr('name'), $("#input").val(), localStorage.getItem('user')); 
+    $('#myModal').css('display', 'none'); 
+    location.reload();
+  }
+  
+  clickImg(img , x){
+    $('#selectedImg').attr('src', img); 
+    $('#selectedImg').attr('value', x.name); 
+    $('#myModal').css('display', 'block'); 
   }
   
   close(){
     $('#myModal').css('display', 'none');
   }
+
+  delPic(){
+    this.userService.deletefromCollection(this.user, $('#selectedImg').attr('src'), $('#selectedImg').attr('value')); 
+    $('#myModal').css('display', 'none'); 
+    location.reload();
+  }
   
-  delpic(){
-    this.userService.deletefromCollection(this.user, $('selectedImg').attr('src'), $('#selectedImg').attr('value'));
-    $('#myModal').css('display', 'none');
+  privacyChange(x){
+    if(x.ispublic){
+      this.userService.changePrivacy(!x.ispublic, x);
+    }else{
+      this.userService.changePrivacy(!x.ispublic, x);
+    }
   }
 
 }
