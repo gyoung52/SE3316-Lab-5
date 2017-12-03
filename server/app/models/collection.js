@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var CollectionSchema = new Schema ({
-    username: String,
+    user: String,
     name: String,
     desc: String,
     ispublic: Boolean,

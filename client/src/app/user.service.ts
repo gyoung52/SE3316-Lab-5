@@ -42,7 +42,6 @@ export class UserService {
  }
  
  createCollection(callback_fun, name, desc){
-    //  console.log(localStorage.getItem('user')); 
      this.http.post('/api/createCollection', {'name' : name, 'desc' : desc, user : localStorage.getItem('user')}).subscribe(data=>{
         callback_fun(data['message']);
      }); 
@@ -81,16 +80,15 @@ export class UserService {
     }); 
  }
  
-setLike(callback_fun, username, name){
-    var usernameAccount = localStorage.getItem('user');
-    this.http.put('/api/addLike', { 'usernameCollection' : username,  'name' : name, 'usernameAccount' : usernameAccount}).subscribe(data=>{
+setLike(callback_fun, user, name){
+    this.http.put('/api/addLike', { 'userCollection' : user,  'name' : name, 'userAccount' : localStorage.getItem('user')}).subscribe(data=>{
     console.log('DATA:',data);
     callback_fun(data);
     })
     }
     
     getHomeCollections(callback){
-     this.http.post('/api/getCollections', { 'user' : localStorage.getItem('user') }).subscribe(data=>{
+     this.http.post('/api/getNotMyCollections', { 'user' : localStorage.getItem('user') }).subscribe(data=>{
          console.log(data);
         callback(data);
      }); 

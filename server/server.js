@@ -369,14 +369,31 @@ router.route('/updatePrivacy')
         });
     });
     
+router.route('/getNotMyCollections')
+    
+    .post((req, res)=> {
+        Collection.find(function(err, col){
+            if(err){
+                return res.send(err);
+            }
+            console.log(col);
+            return res.send(col); 
+            
+        }); 
+        
+    })
+    
 router.route('/addLike')
+
     .put(function(req,res){
-         Collection.find({'username':req.body.usernameCollection,'name': req.body.name }, function(err, collection){
-              var index = collection[0].rank.indexOf(req.body.usernameAccount);
+         Collection.find({'user':req.body.userCollection,'name': req.body.name }, function(err, collection){
+            console.log('Collection[0]:',collection)
+            
+            var index = collection[0].rank.indexOf(req.body.userAccount);
             if (index > -1) {
                 collection[0].rank.splice(index, 1);
             }else{
-                 collection[0].rank.push(req.body.usernameAccount);
+                 collection[0].rank.push(req.body.userAccount);
             }
             
               collection[0].save(function() {

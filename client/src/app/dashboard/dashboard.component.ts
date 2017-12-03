@@ -24,7 +24,7 @@ export class DashboardComponent implements OnInit {
   onCollectionResponse(res : string){
     this.collection = res; 
     if(res[0] == null){
-      return this.res = 'sorry to see that you have no collections'
+      return this.res = 'You have no collections'
     }
     // for(var i = 0; i < res.length; i++){
     //   $('#collections').append( "<li style='text-align:centre' > <h3> " + res[i]['name'] + "</h3><p id=T"+i+">"+ res[i]['desc'] + 
