@@ -19,6 +19,9 @@ import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { HomeComponent } from './home/home.component';
 import { PrivacypolicyComponent } from './privacypolicy/privacypolicy.component';
+import { UnauthhomeComponent } from './unauthhome/unauthhome.component';
+import { UnauthhomeGuard } from './unauthhome.guard';
+
 
 const appRoutes:Routes = [
 
@@ -54,7 +57,12 @@ const appRoutes:Routes = [
   },
   {
     path: 'home',
-    component: HomeComponent
+    component: HomeComponent,
+    canActivate: [UnauthhomeGuard]
+  },
+  {
+    path: 'unauthhome',
+    component: UnauthhomeComponent
   },
   {
     path: 'privacypolicy',
@@ -80,14 +88,15 @@ const appRoutes:Routes = [
     HeaderComponent,
     FooterComponent,
     HomeComponent,
-    PrivacypolicyComponent
+    PrivacypolicyComponent,
+    UnauthhomeComponent,
   ],
   imports: [
     BrowserModule, 
     HttpClientModule, 
     RouterModule.forRoot(appRoutes)
   ],
-  providers: [LoginGuard, AuthGuard, UserService, SearchService],
+  providers: [LoginGuard, AuthGuard, UserService, SearchService, UnauthhomeGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

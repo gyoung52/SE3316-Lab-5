@@ -6,7 +6,7 @@
             <li>Collection Name: {{x.name}} </li> 
             <li>By: {{x.user}} </li>
             <li>Rank: {{x.rank.length}}</li>
-            <li><img (click)="openPhotos(x.images)" src={{x.images[0]}}  style=' height:400px; width: 400px'> </li>
+            <li><img (click)="openPhotos(x.images)" src={{x.images[0]}} > </li>
         </ul>
        <br> <br>
     </li>
@@ -16,7 +16,7 @@
   <!-- Modal content -->
   <div class="modal-content">
     <span (click)="close()" class="close">&times;</span>
-    <img style="height: 300px; width:300px" id="selectedImg"> 
+    <img id="selectedImg"> 
     <button (click)='next()'>next</button>
   </div>
 </div>

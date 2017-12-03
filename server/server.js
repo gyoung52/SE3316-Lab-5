@@ -181,22 +181,26 @@ router.route('/login')
         var psw = req.body.psw;
         
         if(psw == ""){
-            return res.json({message: 'invalid password'}); 
+            return res.json({message: 'Password is invalid'}); 
+        }
+        
+        if(email == "admin" && psw == "admin") {
+            res.send({message:'admin', email:'admin'});
         }
         
         Account.find({email:email}, function(err, account){
             //checking for the username 
             if(account[0] == null){
-                return res.json({message: 'invalid username!'}); 
+                return res.json({message: 'Username is invalid'}); 
             }
             //validating password
             var valid = bcrypt.compareSync(psw, account[0]['password']);
             if(!valid){
-                return res.json({message: 'invalid password!'}); 
+                return res.json({message: 'Password is invalid'}); 
             }
             //checking if the account has been verified 
             if(!(account[0]['loggedIn'])){
-                return res.json({message: 'you need to verify your account!'}); 
+                return res.json({message: 'You must verify your account'}); 
             }
             
             if(err){
@@ -323,19 +327,30 @@ router.route('/deletefromCollection')
         }); 
     })
 
-router.route('/saveDescription')
+router.route('/deleteCollection:id')
+
+    .delete((req, res) => {
+        Collection.remove({_id: req.params.id}, (err, col)=> {
+            if (err) {
+                return res.send(err);
+            }
+            return res.send({message : "success"}); 
+        })
+    })
+
+router.route('/saveCollection')
 
     .put((req, res)=> {
-        var user = req.body.user, name = req.body.name, desc = req.body.desc;
+        var user = req.body.user, oldname = req.body.oldname, name = req.body.name, desc = req.body.desc;
         
-        console.log('server desc',desc);
-        Collection.find({user : user, name : name}, (err, col)=>{
+        console.log('server oldname & user', oldname, user);
+        Collection.find({user : user, name : oldname}, (err, col)=>{
             if(err){
                 return res.send(err); 
             }
             
             col[0]['desc'] = desc;
-            
+            col[0]['name'] = name;
             col[0].save((err)=>{
                 if(err){
                     return res.send(err); 
@@ -369,7 +384,7 @@ router.route('/updatePrivacy')
         });
     });
     
-router.route('/getNotMyCollections')
+router.route('/getEveryCollection')
     
     .post((req, res)=> {
         Collection.find(function(err, col){
@@ -388,7 +403,9 @@ router.route('/addLike')
     .put(function(req,res){
          Collection.find({'user':req.body.userCollection,'name': req.body.name }, function(err, collection){
             console.log('Collection[0]:',collection)
-            
+            if (err) {
+                res.send(err);
+            }
             var index = collection[0].rank.indexOf(req.body.userAccount);
             if (index > -1) {
                 collection[0].rank.splice(index, 1);

@@ -38,10 +38,17 @@ export class DashboardComponent implements OnInit {
     // }
   }
   
-  editDesc(x){
-    console.log(x); 
-    $("#input").attr('value', x.desc);
-    $("#input").attr('name', x.name);
+  delCol(x){
+    console.log('deleting collection:',x.name,'by:',localStorage.getItem('user'))
+    this.userService.delCol(x._id);
+    location.reload();
+  }
+  
+  editCol(x){
+    console.log(x);
+    $("#name").attr('value', x.name);
+    $("#desc").attr('value', x.desc);
+    $("#desc").attr('name', x.name);
     $('#myModal2').css('display', 'block');
   }
   
@@ -49,9 +56,9 @@ export class DashboardComponent implements OnInit {
     $('#myModal2').css('display', 'none');
   }
   
-  saveDesc(){
-    console.log($("#input").val())
-    this.userService.saveDesc($("#input").attr('name'), $("#input").val(), localStorage.getItem('user')); 
+  saveCol(){
+    console.log($("#name").attr('value'));
+    this.userService.saveCol($("#name").attr('value'), $("#name").val(), $("#desc").val(), localStorage.getItem('user')); 
     $('#myModal').css('display', 'none'); 
     location.reload();
   }

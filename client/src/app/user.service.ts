@@ -29,7 +29,8 @@ export class UserService {
             callback_fun(data['message']); 
             localStorage.setItem('user', JSON.stringify(data['email']));
             console.log(localStorage.getItem('user'));
-        }else{
+        }
+        else{
             callback_fun(data['message']);
         }
      }); 
@@ -66,9 +67,16 @@ export class UserService {
      });
  }
  
- saveDesc(name, value, user) {
-     console.log('service', value);
-    this.http.put('/api/saveDescription', {'user': localStorage.getItem('user'), 'name': name, 'desc': value}).subscribe(data=>{
+    delCol(id) {
+        console.log('service user & name:')
+        this.http.delete('/api/deleteCollection'+ id).subscribe(data=>{
+         console.log(data);
+     });
+    }
+ 
+ saveCol(oldname, name, value, user) {
+     console.log('service', oldname);
+    this.http.put('/api/saveCollection', {'oldname': oldname, 'user': localStorage.getItem('user'), 'name': name, 'desc': value}).subscribe(data=>{
         console.log(data);
     });
  }
@@ -88,7 +96,14 @@ setLike(callback_fun, user, name){
     }
     
     getHomeCollections(callback){
-     this.http.post('/api/getNotMyCollections', { 'user' : localStorage.getItem('user') }).subscribe(data=>{
+     this.http.post('/api/getEveryCollection', { 'user' : localStorage.getItem('user') }).subscribe(data=>{
+         console.log(data);
+        callback(data);
+     }); 
+    }
+    
+    getUnauthHomeCollections(callback){
+     this.http.post('/api/getEveryCollection', {}).subscribe(data=>{
          console.log(data);
         callback(data);
      }); 

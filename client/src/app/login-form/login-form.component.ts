@@ -22,9 +22,12 @@ export class LoginFormComponent implements OnInit {
   }
   
   onResponse(res: string){
-    this.response = res; 
+    this.response = res;
     if(res == "success"){
       this.router.navigate(['/dashboard']);
+    }
+    else if (res == "admin"){
+      this.router.navigate(['/dashboard'])
     }
   }
   

@@ -40,7 +40,7 @@ export class SearchComponent implements OnInit {
   
   onSearchResponse(res: string){
     
-    this.photoCollection = new Array();
+    this.pages = [[],[],[],[],[]];
     //this.pages = new Array(Array());
     if (res.length % 20 == 0) {
       this.numOfPages = res.length/20;
@@ -64,7 +64,7 @@ export class SearchComponent implements OnInit {
           if (res[j+(i*20)]['links'][0]['render'] == "image"){
             //this.pages[i][j].push(res[j]['links'][0]['href']);
             console.log('pages:',this.pages);
-            this.pages[i][j] = res[j+(i*20)]['links'][0]['href'];
+            this.pages[i][j] = (res[j+(i*20)]['links'][0]['href']);
           }
         }
       }

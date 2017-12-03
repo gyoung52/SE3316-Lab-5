@@ -14,7 +14,7 @@
   margin-left: 5%;
   margin-bottom: 60px;
   width: 80%;
-  background-color: #33C6FF;
+  background-color: #d6d6d6;
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
   border-radius: 4px;
@@ -59,4 +59,8 @@
     color: #000;
     text-decoration: none;
     cursor: pointer;
+}
+
+ul {
+    list-style-type:none;
 }
