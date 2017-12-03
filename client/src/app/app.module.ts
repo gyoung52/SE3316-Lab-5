@@ -16,7 +16,9 @@ import { CollectionComponent } from './collection/collection.component';
 import { SearchComponent } from './search/search.component';
 import { NotfoundComponent } from './notfound/notfound.component';
 import { HeaderComponent } from './header/header.component';
+import { FooterComponent } from './footer/footer.component';
 import { HomeComponent } from './home/home.component';
+import { PrivacypolicyComponent } from './privacypolicy/privacypolicy.component';
 
 const appRoutes:Routes = [
 
@@ -55,6 +57,10 @@ const appRoutes:Routes = [
     component: HomeComponent
   },
   {
+    path: 'privacypolicy',
+    component: PrivacypolicyComponent
+  },
+  {
     path: '**', 
     component : NotfoundComponent
   }
@@ -72,7 +78,9 @@ const appRoutes:Routes = [
     SearchComponent,
     NotfoundComponent,
     HeaderComponent,
-    HomeComponent
+    FooterComponent,
+    HomeComponent,
+    PrivacypolicyComponent
   ],
   imports: [
     BrowserModule, 
