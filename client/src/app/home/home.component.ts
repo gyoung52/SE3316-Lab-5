@@ -16,7 +16,7 @@ export class HomeComponent implements OnInit {
   constructor(private userService: UserService) {
     this.userService.getHomeCollections(this.onGetAllCollectionsResponse.bind(this));
   }
-  // make it so the user's collections don't show up
+  //Ensures that the user's collections don't show up
   onGetAllCollectionsResponse(res: string){
     this.collectionList = new Array();
     console.log(res);
@@ -28,6 +28,7 @@ export class HomeComponent implements OnInit {
         }
       }
     }
+    //Checks if the user has like these collections
     this.isLiked = new Array();
     for(var  i = 0; i < this.collectionList.length; i++){
       console.log(i);
@@ -58,8 +59,7 @@ export class HomeComponent implements OnInit {
     console.log(this.imgCollection); 
     var index = (parseInt($('#selectedImg').attr('value')) + 1)% this.imgCollection.length; 
     $('#selectedImg').attr('src', this.imgCollection[index]); 
-    $('#selectedImg').attr('value', index); 
-    // console.log(index); 
+    $('#selectedImg').attr('value', index);
   }
   
   checkLike(user,name, i){

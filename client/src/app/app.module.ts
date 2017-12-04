@@ -26,6 +26,7 @@ import { AdminGuard } from './admin.guard';
 import { AdminDmcaComponent } from './admin-dmca/admin-dmca.component';
 
 
+//creating paths
 const appRoutes:Routes = [
 
   {

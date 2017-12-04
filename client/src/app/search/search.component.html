@@ -12,7 +12,7 @@
   <!-- Modal content -->
   <div class="modal-content">
     <span (click)="close()" class="close">&times;</span>
-    <img id="selectedImg"> 
+    <img style="height: 300px; width:300px" id="selectedImg"> 
     <ul id='wrap' style="list-style-type:none">
         <li id='collections' *ngFor= "let x of collections">
             <input type="radio" name="collection" value='{{x}}'>{{x}}

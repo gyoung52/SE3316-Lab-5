@@ -41,7 +41,7 @@ export class SearchComponent implements OnInit {
   onSearchResponse(res: string){
     
     this.pages = [[],[],[],[],[]];
-    //this.pages = new Array(Array());
+    //calculating number of pages and thelength of each page
     if (res.length % 20 == 0) {
       this.numOfPages = res.length/20;
       this.spill = 0;
@@ -49,8 +49,8 @@ export class SearchComponent implements OnInit {
       this.numOfPages = res.length/20 + 1;
       this.spill = res.length%20;
     }
-    console.log('Response length',res.length)
-    console.log('Num of pages & spill:',this.numOfPages, this.spill)
+    
+    //dividing results into pages of 20 images
     for (var i = 0; i < this.numOfPages; i++) {
       var pageLength = 20;
       if (i == this.numOfPages-1 && this.spill !== 0) {
@@ -58,19 +58,15 @@ export class SearchComponent implements OnInit {
       }
       console.log('i:',i);
       for(var j = 0; j < pageLength; j++){
-        console.log('j:',j);
-        //console.log(this.photoCollection);
         if (res[j+(i*20)]['links'] != null){
           if (res[j+(i*20)]['links'][0]['render'] == "image"){
-            //this.pages[i][j].push(res[j]['links'][0]['href']);
             console.log('pages:',this.pages);
             this.pages[i][j] = (res[j+(i*20)]['links'][0]['href']);
           }
         }
       }
-      //console.log('pages at i:',this.pages[i]);
-      //(this.pages[i]).push(this.photoCollection);
     }
+    //display initial page
     this.rankedCollections.nativeElement.innerHTML = "";
     for (var j = 0; j < this.pages[0].length ; j++){
       $('#pictures').append("<li style='float:left;padding: 0.5cm 0.25cm 0.5cm 0.25cm;' >"
@@ -80,6 +76,7 @@ export class SearchComponent implements OnInit {
     }
   }
   
+  //displays the next page of images
   pageUpClick(event){
     if (this.pageNum !== (this.numOfPages-1)){
       this.pageNum++;
@@ -93,6 +90,7 @@ export class SearchComponent implements OnInit {
     }
   }
   
+  //displays the previous page of images
   pageDownClick(event){
     if (this.pageNum !== 0){
       this.pageNum--;
@@ -118,6 +116,7 @@ export class SearchComponent implements OnInit {
     $('#myModal').css('display', 'none');
   }
   
+  //opens modal to add picture
   addPic(){
     console.log($('#wrap input[name=collection]:checked').val());
     $('#myModal').css('display', 'none');

@@ -28,12 +28,14 @@ export class DashboardComponent implements OnInit {
     }
   }
   
+  //delete collection function
   delCol(x){
     console.log('deleting collection:',x.name,'by:',localStorage.getItem('user'))
     this.userService.delCol(x._id);
     location.reload();
   }
   
+  //edit collection function
   editCol(x){
     console.log(x);
     $("#name").attr('value', x.name);
@@ -42,10 +44,12 @@ export class DashboardComponent implements OnInit {
     $('#myModal2').css('display', 'block');
   }
   
+  //closes modal
   close1(){
     $('#myModal2').css('display', 'none');
   }
   
+  //saves changes to collections
   saveCol(){
     console.log($("#name").attr('value'));
     this.userService.saveCol($("#name").attr('value'), $("#name").val(), $("#desc").val(), localStorage.getItem('user')); 
@@ -53,6 +57,7 @@ export class DashboardComponent implements OnInit {
     location.reload();
   }
   
+  //opens modal
   clickImg(img , x){
     $('#selectedImg').attr('src', img); 
     $('#selectedImg').attr('value', x.name); 
@@ -63,6 +68,7 @@ export class DashboardComponent implements OnInit {
     $('#myModal').css('display', 'none');
   }
 
+  //function for deleting picture
   delPic(){
     this.userService.deletefromCollection(this.user, $('#selectedImg').attr('src'), $('#selectedImg').attr('value')); 
     $('#myModal').css('display', 'none'); 
