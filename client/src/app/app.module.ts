@@ -21,6 +21,9 @@ import { HomeComponent } from './home/home.component';
 import { PrivacypolicyComponent } from './privacypolicy/privacypolicy.component';
 import { UnauthhomeComponent } from './unauthhome/unauthhome.component';
 import { UnauthhomeGuard } from './unauthhome.guard';
+import { AdminComponent } from './admin/admin.component';
+import { AdminGuard } from './admin.guard';
+import { AdminDmcaComponent } from './admin-dmca/admin-dmca.component';
 
 
 const appRoutes:Routes = [
@@ -62,11 +65,22 @@ const appRoutes:Routes = [
   },
   {
     path: 'unauthhome',
-    component: UnauthhomeComponent
+    component: UnauthhomeComponent,
+    canActivate: [LoginGuard]
   },
   {
     path: 'privacypolicy',
     component: PrivacypolicyComponent
+  },
+  {
+    path: 'admin',
+    component: AdminComponent,
+    canActivate: [AdminGuard]
+  },
+  {
+    path: 'adminDMCA',
+    component: AdminDmcaComponent,
+    canActivate: [AdminGuard]
   },
   {
     path: '**', 
@@ -90,13 +104,15 @@ const appRoutes:Routes = [
     HomeComponent,
     PrivacypolicyComponent,
     UnauthhomeComponent,
+    AdminComponent,
+    AdminDmcaComponent,
   ],
   imports: [
     BrowserModule, 
     HttpClientModule, 
     RouterModule.forRoot(appRoutes)
   ],
-  providers: [LoginGuard, AuthGuard, UserService, SearchService, UnauthhomeGuard],
+  providers: [LoginGuard, AuthGuard, UserService, SearchService, UnauthhomeGuard, AdminGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -185,31 +185,32 @@ router.route('/login')
         }
         
         if(email == "admin" && psw == "admin") {
-            res.send({message:'admin', email:'admin'});
+            res.send({message:'admin'});
         }
-        
-        Account.find({email:email}, function(err, account){
-            //checking for the username 
-            if(account[0] == null){
-                return res.json({message: 'Username is invalid'}); 
-            }
-            //validating password
-            var valid = bcrypt.compareSync(psw, account[0]['password']);
-            if(!valid){
-                return res.json({message: 'Password is invalid'}); 
-            }
-            //checking if the account has been verified 
-            if(!(account[0]['loggedIn'])){
-                return res.json({message: 'You must verify your account'}); 
-            }
-            
-            if(err){
-                return res.send(err); 
-            }
-            
-            res.send({message:'success', email: account[0]['email']}); 
-            
-        }); 
+        else {
+            Account.find({email:email}, function(err, account){
+                //checking for the username 
+                if(account[0] == null){
+                    return res.json({message: 'Username is invalid'}); 
+                }
+                //validating password
+                var valid = bcrypt.compareSync(psw, account[0]['password']);
+                if(!valid){
+                    return res.json({message: 'Password is invalid'}); 
+                }
+                //checking if the account has been verified 
+                if(!(account[0]['loggedIn'])){
+                    return res.json({message: 'You must verify your account'}); 
+                }
+                
+                if(err){
+                    return res.send(err); 
+                }
+                
+                res.send({message:'success', email: account[0]['email']}); 
+                
+            });
+        }
     });
     
 router.route('/createCollection')
@@ -299,8 +300,9 @@ router.route('/deletefromCollection')
 
     .post((req, res)=> {
         var user = req.body.user, img = req.body.img, name = req.body.name;
+        console.log('server user & name:',user, name);
         Collection.find({user : user, name : name}, (err, col)=>{
-            
+            console.log(col[0]);
             if(err){
                 return res.send(err); 
             }

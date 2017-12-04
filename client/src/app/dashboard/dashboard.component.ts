@@ -26,16 +26,6 @@ export class DashboardComponent implements OnInit {
     if(res[0] == null){
       return this.res = 'You have no collections'
     }
-    // for(var i = 0; i < res.length; i++){
-    //   $('#collections').append( "<li style='text-align:centre' > <h3> " + res[i]['name'] + "</h3><p id=T"+i+">"+ res[i]['desc'] + 
-    //     "</p><div id=D"+i+"></div>"); 
-    //     //<input id=pu"+i+" type=checkbox name='public'>Public
-    //   for(var j = 0; j < res[i]['images'].length; j ++){
-    //     $('#collections').append("<br><img  value='name' id="+i+""+j+" src = "+res[i]['images'][j] +"></li>" );
-    //     $("#"+i+""+j).click({src : res[i]['images'][j], name : res[i]['name'] }, this.clickImg); 
-    //   }
-    //   $("#T"+i).click({name : res[i]['name'], desc : res[i]['desc'] }, this.editDesc); 
-    // }
   }
   
   delCol(x){

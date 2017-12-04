@@ -25,6 +25,9 @@ export class UserService {
  postValidate(callback_fun, email, psw){
      this.http.post('/api/login', {'email' : email, 'psw' : psw}).subscribe(data=>{
          console.log(data); 
+        if (data['message'] == 'admin') {
+            localStorage.setItem('user', 'admin');
+        }
         if(data['email'] != null){
             callback_fun(data['message']); 
             localStorage.setItem('user', JSON.stringify(data['email']));
@@ -62,6 +65,7 @@ export class UserService {
  }
  
  deletefromCollection(user, img, name){
+     console.log('service user & name:',user, name);
      this.http.post('/api/deletefromCollection', {'user': user, 'img': img, 'name': name}).subscribe(data=>{
          console.log(data);
      });
@@ -70,7 +74,7 @@ export class UserService {
     delCol(id) {
         console.log('service user & name:')
         this.http.delete('/api/deleteCollection'+ id).subscribe(data=>{
-         console.log(data);
+        console.log(data);
      });
     }
  
@@ -103,6 +107,13 @@ setLike(callback_fun, user, name){
     }
     
     getUnauthHomeCollections(callback){
+     this.http.post('/api/getEveryCollection', {}).subscribe(data=>{
+         console.log(data);
+        callback(data);
+     }); 
+    }
+    
+    getAdminCollections(callback){
      this.http.post('/api/getEveryCollection', {}).subscribe(data=>{
          console.log(data);
         callback(data);

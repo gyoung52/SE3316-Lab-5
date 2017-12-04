@@ -27,7 +27,7 @@ export class LoginFormComponent implements OnInit {
       this.router.navigate(['/dashboard']);
     }
     else if (res == "admin"){
-      this.router.navigate(['/dashboard'])
+      this.router.navigate(['/admin'])
     }
   }
   
